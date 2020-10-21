@@ -10,9 +10,6 @@
             "versionName": "Jenkins - Winter '19",
             "versionNumber": "1.0.0.NEXT",
             "default": false
-            "namespace": "",
-            "sfdcLoginUrl": "https://login.salesforce.com",
-            "sourceApiVersion": "44.0"
         }
     ],
     "namespace": "",
