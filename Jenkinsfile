@@ -4,9 +4,10 @@ import groovy.json.JsonSlurperClassic
 
 node {
     try{
-            echo "Test1"
+            
             stage('Init test'){
             echo "Init test"
+            echo "Test1"
         }
         stage('Checkout'){
 
