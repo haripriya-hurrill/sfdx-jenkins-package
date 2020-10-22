@@ -32,34 +32,29 @@ node {
         echo "Wrap All Stages in a withCredentials Command"
         withCredentials([file(credentialsId: SERVER_KEY_CREDENTIALS_ID, variable: 'server_key_file')]) {
         
-            echo "Authorize Your Dev Hub Org with JWT key and give it an alias"
-            stage('Authorize DevHub') {   
-                rc = command "${toolbelt}/sfdx force:auth:jwt:grant --instanceurl ${SF_INSTANCE_URL} --clientid ${SF_CONSUMER_KEY} --username ${SF_USERNAME} --jwtkeyfile ${server_key_file} --setdefaultdevhubusername --setalias HubOrg"
-                if (rc != 0) {
-                    error 'Salesforce dev hub org authorization failed.'
-                }
-            }
             
             echo "Create package version"
-            stage('Create Package Version') {
+            stage('Deploy code') {
                 if (isUnix()) {
-                    output = sh returnStdout: true, script: "${toolbelt}/sfdx force:package:version:create --package ${PACKAGE_NAME} --installationkeybypass --wait 10 --json --targetdevhubusername HubOrg"
+                    rc = sh returnStatus: true, script: "${toolbelt} force:auth:jwt:grant --clientid ${SF_CONSUMER_KEY} --username ${SF_USERNAME} --jwtkeyfile ${SERVER_KEY_CREDENTIALS_ID} --setdefaultdevhubusername --instanceurl ${SF_INSTANCE_URL}"
                 } else {
-                    output = bat(returnStdout: true, script: "${toolbelt}/sfdx force:package:version:create --package ${PACKAGE_NAME} --installationkeybypass --wait 10 --json --targetdevhubusername HubOrg").trim()
-                    output = output.readLines().drop(1).join(" ")
+                    rc = bat(returnStatus: true, script: "\"${toolbelt}\" force:auth:jwt:grant --clientid ${SF_CONSUMER_KEY} --username ${SF_USERNAME} --jwtkeyfile \"${SERVER_KEY_CREDENTIALS_ID}\" --setdefaultdevhubusername --instanceurl ${SF_INSTANCE_URL}"
                 }
 
-                // Wait 5 minutes for package replication.
-                sleep 300
+                if (rc != 0) { error 'hub org authorization failed' }
 
-                def jsonSlurper = new JsonSlurperClassic()
-                def response = jsonSlurper.parseText(output)
-
-                PACKAGE_VERSION = response.result.SubscriberPackageVersionId
-
-                response = null
-
-                echo ${PACKAGE_VERSION}
+			    println rc
+			
+			    // need to pull out assigned username
+			    if (isUnix()) {
+				    rmsg = sh returnStdout: true, script: "${toolbelt} force:mdapi:deploy -d manifest/. -u ${SF_USERNAME}"
+			    }else{
+			    rmsg = bat returnStdout: true, script: "\"${toolbelt}\" force:mdapi:deploy -d manifest/. -u ${SF_USERNAME}"
+			    }
+			  
+                printf rmsg
+                println('Hello from a Job DSL script!')
+                println(rmsg)
             }
             
         }
