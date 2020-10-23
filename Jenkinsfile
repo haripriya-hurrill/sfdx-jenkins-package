@@ -21,7 +21,7 @@ node {
    	withCredentials([file(credentialsId: SF_JWT_CRED_ID, variable: 'server_key_file')]) {
 		
 		stage ('Authentication'){
-			rc = sh returnStatus: true, script: "${toolbelt} force:auth:jwt:grant --clientid ${SF_CONSUMER_KEY} --username ${SF_HUB_ORG} --jwtkeyfile ${jwt_key_file} --setdefaultdevhubusername --instanceurl ${SF_HOST}
+			rc = sh returnStatus: true, script: "${toolbelt} force:auth:jwt:grant --clientid ${SF_CONSUMER_KEY} --username ${SF_HUB_ORG} --jwtkeyfile ${jwt_key_file} --setdefaultdevhubusername --instanceurl ${SF_HOST}"
 		}
 		
 		if (rc != 0) { error 'hub org authorization failed' }
