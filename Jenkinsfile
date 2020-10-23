@@ -12,18 +12,13 @@ node {
 	    
 	def toolbelt = tool 'toolbelt'
         
-        stage('Init test'){
-        echo "Init test"
-        echo "Test1"
-        }
-        
         echo "Check Out the Source Code"
         stage('Checkout'){
             checkout scm
         }
         
         echo "Wrap All Stages in a withCredentials Command"
-   
+   	withCredentials([file(credentialsId: SERVER_KEY_CREDENTIALS_ID, variable: 'server_key_file')]) {
         
 	stage ('PackageValidation') {
 	echo "entering package validation"
