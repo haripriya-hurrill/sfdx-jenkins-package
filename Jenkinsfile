@@ -48,7 +48,11 @@ node {
                 }
             }
 
-    }     
+    } 
+    
+    catch(err){
+        echo "build failed"
+    }    
 }
 
 def command(script) {
