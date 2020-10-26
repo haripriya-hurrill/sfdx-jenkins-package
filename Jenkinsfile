@@ -19,27 +19,13 @@ node {
         checkout scm
     }
 
-    withCredentials([file(credentialsId: SF_JWT_CRED_ID, variable: 'server_key_file')]){
+    withCredentials([file(credentialsId: SF_JWT_CRED_ID, variable: 'server_key_file'),usernamePassword(credentialsId: 'SF_HUB_ORG', passwordVariable: 'sfdc_org_consumer_key', usernameVariable: 'sfdc_org_username')]){
         stage('Authorise to Saleforce') {
-            rc = command "${toolbelt}/ sfdx force:auth:jwt:grant --clientid ${SF_CONSUMER_KEY} --username ${SF_HUB_ORG} --jwtkeyfile ${server_key_file} --username ${SF_HUB_ORG} --setalias PROD"
-            if (rc != 0) { error 'hub org authorization failed' }   
+            rc = command " sfdx force:auth:jwt:grant --clientid ${sfdc_org_consumer_key} --username ${sfdc_org_username} --jwtkeyfile ${server_key_file} --setalias PROD"
+            if (rc != 0) { error 'hub org authorization failed' }  
+            else { echo 'Authorisation successfull'} 
         }
                         
-        stage('Check only deploy') {
-            rc = sh command "${toolbelt}/ sfdx force:source:convert --rootdir force-app/ --outputdir src/"
-            if (rc != 0) { error 'metadata convert failed' }
-            rmsg = command "${toolbelt}/ sfdx force:mdapi:deploy --checkonly --deploydir src/ --targetusername PROD --testlevel RunLocalTests --wait 10 --json"
-            
-            def robj = new JsonSlurper().parseText(rmsg)
-            if (robj.status != 0) { error 'prod deploy failed: ' + robj.message }
-            else { env.VALIDATION_ID = robj.result.id }
-        }
-
-        stage('Deploy Result'){
-            rc = command "${toolbelt}/sfdx force:mdapi:deploy --targetusername PROD --validateddeployrequestid ${env.VALIDATION_ID}"
-            if (rc != 0) { error 'Deploy result failed' }
-        }
-
 
     } 
 }
