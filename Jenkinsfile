@@ -7,6 +7,7 @@ node {
     def SF_HOST = env.SF_HOST
     def SF_JWT_CRED_ID = env.JWT_CRED_ID
     def SF_CONSUMER_KEY=env.SF_CONSUMER_KEY   
+    def SF_JWT_CRED_ID=env.SF_JWT_CRED_ID
       
 
     stage('Init test'){
@@ -19,9 +20,10 @@ node {
         checkout scm
     }
 
-    withEnv(["HOME=${env.WORKSPACE}"]){
+    withCredentials([file(credentialsId: SF_JWT_CRED_ID, variable: 'server_key_file')]){
         stage('Authorise to Saleforce') {
-            echo "Wrap All Stages in a withCredentials Command"    
+            rc = sh returnStatus: true, script: "sfdx force:auth:jwt:grant --clientid ${env.SF_CONSUMER_KEY} --username ${env.SF_HUB_ORG} --jwtkeyfile server.key --setalias PROD"
+            if (rc != 0) { error 'hub org authorization failed' }   
         }
                         
         stage('Deploy and Run Tests') {
