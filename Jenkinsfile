@@ -25,8 +25,18 @@ node {
             if (rc != 0) { error 'hub org authorization failed' }  
             else { echo 'Authorisation successfull'} 
         }
-                        
 
+        stage('Deploy and Run Tests') {
+
+            dir('my-first-package'){​​
+                rc = command "sfdx force:mdapi:deploy --wait 3 --targetusername PROD "
+		        if (rc != 0) {
+			        error 'Salesforce deploy and test run failed.'
+		        }
+            }
+        }
+
+        
     } 
 }
 
