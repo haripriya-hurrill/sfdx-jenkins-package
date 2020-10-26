@@ -5,7 +5,6 @@ node {
 
     def SF_HUB_ORG=env.SF_HUB_ORG
     def SF_HOST = env.SF_HOST
-    def SF_JWT_CRED_ID = env.JWT_CRED_ID
     def SF_CONSUMER_KEY=env.SF_CONSUMER_KEY   
     def SF_JWT_CRED_ID=env.SF_JWT_CRED_ID
       
