@@ -22,7 +22,7 @@ node {
 
     withCredentials([file(credentialsId: SF_JWT_CRED_ID, variable: 'server_key_file')]){
         stage('Authorise to Saleforce') {
-            rc = sh returnStatus: true, script: "sfdx force:auth:jwt:grant --clientid ${env.SF_CONSUMER_KEY} --username ${env.SF_HUB_ORG} --jwtkeyfile server.key --setalias PROD"
+            rc = sh returnStatus: true, script: "sfdx force:auth:jwt:grant --clientid ${SF_CONSUMER_KEY} --username ${SF_HUB_ORG} --jwtkeyfile server.key --setalias PROD"
             if (rc != 0) { error 'hub org authorization failed' }   
         }
                         
