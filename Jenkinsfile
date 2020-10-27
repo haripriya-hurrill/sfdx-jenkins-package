@@ -39,7 +39,7 @@ node {
         stage ('Validate Package'){
 
             dir('my-first-package'){
-                rm = command "sfdx force:mdapi:deploy --checkonly --deploydir . --targetusername PROD --wait 3 --json"
+                rm = command "sfdx force:mdapi:deploy --checkonly --deploydir . -u ${sfdc_org_username} --wait 3 --json"
 
                 def robj = new JsonSlurper().parseText(rm)
                 if (robj.status != 0) { error 'prod deploy failed: ' + robj.message }
