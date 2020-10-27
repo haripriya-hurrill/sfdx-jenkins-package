@@ -29,14 +29,26 @@ node {
         stage('Deploy and Run Tests') {
 
             dir('my-first-package'){​​
-                rc = command "sfdx force:mdapi:deploy --wait 3 --targetusername PROD "
+                rc = command "sfdx force:mdapi:deploy --wait 3 --deploydir . -u ${sfdc_org_username} "
 		        if (rc != 0) {
 			        error 'Salesforce deploy and test run failed.'
 		        }
             }
         }
 
-        
+        stage ('Validate Package'){
+
+            dir('my-first-package'){
+                rm = command "sfdx force:mdapi:deploy --checkonly --deploydir . -u ${sfdc_org_username} --wait 3 --json"
+
+                def robj = new JsonSlurper().parseText(rm)
+                if (robj.status != 0) { error 'prod deploy failed: ' + robj.message }
+                else { env.VALIDATION_ID = robj.result.id }
+            }
+
+        }
+
+
     } 
 }
 
