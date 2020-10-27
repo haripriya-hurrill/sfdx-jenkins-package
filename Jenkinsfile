@@ -28,12 +28,12 @@ node {
 
         stage('Deploy and Run Tests') {
 
-            dir('../my-first-package'){
-                rc = command "sfdx force:mdapi:deploy --wait 3 ---deploydir ${DEPLOYDIR} --targetusername ${sfdc_org_username} "
+            //dir('../my-first-package'){
+                rc = command "sfdx force:mdapi:deploy --wait 3 -d <../my-first-package> -u ${sfdc_org_username} "
 		        if (rc != 0) {
 			        error 'Salesforce deploy and test run failed.'
 		        }
-            }
+            //}
         }
 
 
