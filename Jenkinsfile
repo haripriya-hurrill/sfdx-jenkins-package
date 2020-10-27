@@ -28,7 +28,7 @@ node {
 
         stage('Deploy and Run Tests') {
 
-            dir('C:\Users\haripriya.hurrill\Tools\my-first-package\my-first-package'){​​
+            dir('C:\Users\haripriya.hurrill\Tools\my-first-package\my-first-package'){
                 rc = command "sfdx force:mdapi:deploy --wait 3 ---deploydir ${DEPLOYDIR} --targetusername ${sfdc_org_username} "
 		        if (rc != 0) {
 			        error 'Salesforce deploy and test run failed.'
