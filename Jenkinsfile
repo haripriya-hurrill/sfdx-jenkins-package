@@ -35,7 +35,7 @@ node {
                 rm = command "sfdx force:mdapi:deploy --checkonly --deploydir . -u ${sfdc_org_username} --wait 3 --json"
                 sleep time: 3, unit: 'MINUTES'  //to explain
                 //def robj = new JsonSlurper().parseText(rm)
-                def robj = new groovy.json.JsonSlurper().parseText(rm)
+                def robj = new groovy.json.JsonSlurper().parseText(java.io.Reader rm)
                 if (robj["result"]["success"])
                     {echo 'validation successfull' 
                         validationStatus = true
