@@ -1,13 +1,14 @@
 #!groovy
 import groovy.json.JsonSlurper
 
+
 node {
 
     def SF_HUB_ORG=env.SF_HUB_ORG //username
     def SF_HOST = env.SF_HOST //url
     def SF_CONSUMER_KEY=env.SF_CONSUMER_KEY   
     def SF_JWT_CRED_ID=env.SF_JWT_CRED_ID
-      
+    def validationStatus = false
 
     stage('Init test'){
         echo "Init test"
@@ -26,32 +27,38 @@ node {
             else { echo 'Authorisation successfull'} 
         }
 
-        stage('Deploy and Run Tests') {
-
-<<<<<<< HEAD
-            dir('my-first-package'){​​
-=======
-            dir('my-first-package'){
->>>>>>> 6279ed3e6cb99216d353390e4e83d050ec7f741b
-                rc = command "sfdx force:mdapi:deploy --wait 3 --deploydir . -u ${sfdc_org_username} "
-		        if (rc != 0) {
-			        error 'Salesforce deploy and test run failed.'
-		        }
-            }
-        }
+        
 
         stage ('Validate Package'){
 
             dir('my-first-package'){
                 rm = command "sfdx force:mdapi:deploy --checkonly --deploydir . -u ${sfdc_org_username} --wait 3 --json"
+                sleep time: 3, unit: 'MINUTES'  //to explain
+                //def robj = new JsonSlurper().parseText(rm)
+                def robj = new groovy.json.JsonSlurperClassic().parseText(rm)
+                if (robj["result"]["success"])
+                    {echo 'validation successfull' 
+                        validationStatus = true
+                    }
 
-                def robj = new JsonSlurper().parseText(rm)
-                if (robj.status != 0) { error 'prod deploy failed: ' + robj.message }
-                else { env.VALIDATION_ID = robj.result.id }
+                else { error 'validation fail '}
             }
 
         }
 
+        stage('Deploy') {
+
+            if (validationStatus){
+                dir('my-first-package'){
+
+                    rc = command "sfdx force:mdapi:deploy --wait 3 --deploydir . -u ${sfdc_org_username} "
+                    sleep time: 3, unit: 'MINUTES'
+                    if (rc != 0) {
+                        error 'Salesforce deploy and test run failed.'
+                    } else {echo 'Deploy success'}
+                }
+            } else { echo 'Validation false, do not deploy'}
+        }
 
     } 
 }
