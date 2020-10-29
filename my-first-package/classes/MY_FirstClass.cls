@@ -1,3 +1,5 @@
 public class MY_FirstClass {
-	System.debug('init test...');
+	public void myFirstMethod() {
+		System.debug('init test....');
+	}
 }
