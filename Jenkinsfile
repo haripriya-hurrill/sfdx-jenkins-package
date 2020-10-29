@@ -33,7 +33,8 @@ node {
 
             dir('my-first-package'){
                 
-                def rm = command "sfdx force:mdapi:deploy --checkonly --deploydir . -u ${sfdc_org_username} --wait 3 --json --loglevel debug"
+                //def rm = command "sfdx force:mdapi:deploy --checkonly --deploydir . -u ${sfdc_org_username} --wait 3 --json --loglevel debug"
+                def rm = sh returnStdout: true, script: "sfdx force:mdapi:deploy --checkonly --deploydir . -u ${sfdc_org_username} --wait 3 --json --loglevel debug"
                 sleep time: 3, unit: 'MINUTES'  //to explain
                 
                 
