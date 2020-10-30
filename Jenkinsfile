@@ -39,12 +39,12 @@ node {
                 //def rm = sh returnStdout: true, script: "sfdx force:mdapi:deploy --checkonly --deploydir . -u ${sfdc_org_username} --wait 3 --json --loglevel debug"
                 sleep time: 1, unit: 'MINUTES'  //to explain
                 println rm
-                println "printing rm value ${​​rm}"​
+                println ("printing rm value" + rm​)
                 
                 def res = readFile "deployReport.json"
-                println "Printing res ${res}"
+                println ("Printing res" res)
                 def robj = new groovy.json.JsonSlurperClassic().parseText(res)
-                println "Printing ${robj}"
+                println ("Printing " robj)
                 /*if (robj["result"]["success"])
                     {println 'validation successfull' 
                         validationStatus = true
