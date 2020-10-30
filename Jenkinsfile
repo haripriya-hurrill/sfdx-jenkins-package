@@ -36,7 +36,7 @@ node {
                 def rm = commandStdOut "sfdx force:mdapi:deploy --checkonly --deploydir . -u ${sfdc_org_username} --wait 1 --json --loglevel debug"
                 //def rm = sh returnStdout: true, script: "sfdx force:mdapi:deploy --checkonly --deploydir . -u ${sfdc_org_username} --wait 3 --json --loglevel debug"
                 sleep time: 1, unit: 'MINUTES'  //to explain
-                echo "${​​rm}"​
+                echo "printing rm value ${​​rm}"​
                 
                 def robj = new groovy.json.JsonSlurperClassic().parseText(rm)
                 if (robj["result"]["success"])
