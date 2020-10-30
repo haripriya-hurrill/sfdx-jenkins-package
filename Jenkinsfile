@@ -1,5 +1,7 @@
 #!groovy
 import groovy.json.JsonSlurperClassic
+import groovy.json.* 
+import java.time.*
 
 
 node {
@@ -36,6 +38,7 @@ node {
                 def rm = command "sfdx force:mdapi:deploy --checkonly --deploydir . -u ${sfdc_org_username} --wait 1 --json --loglevel debug > deployReport.json  2>&1"
                 //def rm = sh returnStdout: true, script: "sfdx force:mdapi:deploy --checkonly --deploydir . -u ${sfdc_org_username} --wait 3 --json --loglevel debug"
                 sleep time: 1, unit: 'MINUTES'  //to explain
+                echo rm
                 echo "printing rm value ${​​rm}"​
                 
                 def res = readFile "deployReport.json"
