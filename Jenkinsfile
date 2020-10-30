@@ -1,5 +1,5 @@
 #!groovy
-import groovy.json.JsonSlurper
+import groovy.json.JsonSlurperClassic
 
 
 node {
@@ -38,7 +38,7 @@ node {
                 sleep time: 3, unit: 'MINUTES'  //to explain
                 
                 
-                def robj = new groovy.json.JsonSlurperClassic().parseText(rm)
+                def robj = new groovy.json.JsonSlurperClassic().parseText(rm).robj
                 if (robj["result"]["success"])
                     {echo 'validation successfull' 
                         validationStatus = true
