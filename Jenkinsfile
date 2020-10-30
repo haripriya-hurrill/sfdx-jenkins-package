@@ -39,7 +39,13 @@ node {
                 //def rm = sh returnStdout: true, script: "sfdx force:mdapi:deploy --checkonly --deploydir . -u ${sfdc_org_username} --wait 3 --json --loglevel debug"
                 sleep time: 1, unit: 'MINUTES'  //to explain
                 println rm
-                println ("printing rm value" + rm​)
+
+                if (rm == 1) {
+                    println ('validation is true')
+                } else { println 'Validation is false'}
+
+
+                /*println ("printing rm value" + rm​)
                 
                 def res = readFile "deployReport.json"
                 println ("Printing res" + res)
@@ -61,8 +67,8 @@ node {
             if (validationStatus){
                 dir('my-first-package'){
 
-                    rc = command "sfdx force:mdapi:deploy --wait 3 --deploydir . -u ${sfdc_org_username} "
-                    sleep time: 3, unit: 'MINUTES'
+                    rc = command "sfdx force:mdapi:deploy --wait 1 --deploydir . -u ${sfdc_org_username} "
+                    sleep time: 1, unit: 'MINUTES'
                     if (rc != 0) {
                         error 'Salesforce deploy and test run failed.'
                     } else {println 'Deploy success'}
