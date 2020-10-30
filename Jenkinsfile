@@ -45,12 +45,12 @@ node {
                 } else { println 'Validation is false'}
 
 
-                println ("printing rm value" + rm​)
+                //println ("printing rm value" + rm​)
                 
-                /*def res = readFile "deployReport.json"
-                println ("Printing res" + res)
-                def robj = new groovy.json.JsonSlurperClassic().parseText(res)
-                println ("Printing " + robj)
+                def res = readFile "deployReport.json"
+                //println ("Printing res" + res)
+                //def robj = new groovy.json.JsonSlurperClassic().parseText(res)
+                //println ("Printing " + robj)
             
                 /*if (robj["result"]["success"])
                     {println 'validation successfull' 
