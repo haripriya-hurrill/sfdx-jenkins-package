@@ -13,10 +13,10 @@ node {
     def validationStatus = false
 
     stage('Init test'){
-        echo "Init test"
+        println "Init test"
     }
 
-    echo "Check Out the Source Code"
+    println "Check Out the Source Code"
     stage('checkout source') {
             // when running in multi-branch job, one must issue this command
         checkout scm
@@ -26,7 +26,7 @@ node {
         stage('Authorise to Saleforce') {
             rc = command " sfdx force:auth:jwt:grant --clientid ${sfdc_org_consumer_key} --username ${sfdc_org_username} --jwtkeyfile ${server_key_file} --setalias PROD"
             if (rc != 0) { error 'hub org authorization failed' }  
-            else { echo 'Authorisation successfull'} 
+            else { println 'Authorisation successfull'} 
         }
 
         
@@ -38,15 +38,15 @@ node {
                 def rm = command "sfdx force:mdapi:deploy --checkonly --deploydir . -u ${sfdc_org_username} --wait 1 --json --loglevel debug > deployReport.json  2>&1"
                 //def rm = sh returnStdout: true, script: "sfdx force:mdapi:deploy --checkonly --deploydir . -u ${sfdc_org_username} --wait 3 --json --loglevel debug"
                 sleep time: 1, unit: 'MINUTES'  //to explain
-                echo rm
-                echo "printing rm value ${​​rm}"​
+                println rm
+                println "printing rm value ${​​rm}"​
                 
                 def res = readFile "deployReport.json"
-                echo "Printing res ${res}"
+                println "Printing res ${res}"
                 def robj = new groovy.json.JsonSlurperClassic().parseText(res)
-                echo "Printing ${robj}"
+                println "Printing ${robj}"
                 /*if (robj["result"]["success"])
-                    {echo 'validation successfull' 
+                    {println 'validation successfull' 
                         validationStatus = true
                     }
 
@@ -64,9 +64,9 @@ node {
                     sleep time: 3, unit: 'MINUTES'
                     if (rc != 0) {
                         error 'Salesforce deploy and test run failed.'
-                    } else {echo 'Deploy success'}
+                    } else {println 'Deploy success'}
                 }
-            } else { echo 'Validation false, do not deploy'}
+            } else { println 'Validation false, do not deploy'}
         }
 
     } 
