@@ -33,18 +33,20 @@ node {
 
             dir('my-first-package'){
                 
-                def rm = commandStdOut "sfdx force:mdapi:deploy --checkonly --deploydir . -u ${sfdc_org_username} --wait 1 --json --loglevel debug"
+                def rm = command "sfdx force:mdapi:deploy --checkonly --deploydir . -u ${sfdc_org_username} --wait 1 --json --loglevel debug > deployReport.json  2>&1"
                 //def rm = sh returnStdout: true, script: "sfdx force:mdapi:deploy --checkonly --deploydir . -u ${sfdc_org_username} --wait 3 --json --loglevel debug"
                 sleep time: 1, unit: 'MINUTES'  //to explain
                 echo "printing rm value ${​​rm}"​
                 
-                def robj = new groovy.json.JsonSlurperClassic().parseText(rm)
-                if (robj["result"]["success"])
+                def res = readFile "deployReport.json"
+                def robj = new groovy.json.JsonSlurperClassic().parseText(res)
+                echo "Printing ${robj}"
+                /*if (robj["result"]["success"])
                     {echo 'validation successfull' 
                         validationStatus = true
                     }
 
-                else { error 'validation fail '}
+                else { error 'validation fail '} */
             }
 
         }
