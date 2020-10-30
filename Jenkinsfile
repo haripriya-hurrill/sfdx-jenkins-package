@@ -47,9 +47,9 @@ node {
 
                 //println ("printing rm value" + rm​)
                 
-                def res = readFile "deployReport.json"
+                //def res = readFile "deployReport.json"
                 //println ("Printing res" + res)
-                //def robj = new groovy.json.JsonSlurperClassic().parseText(res)
+                def robj = new groovy.json.JsonSlurperClassic().parseText(rm)
                 //println ("Printing " + robj)
             
                 /*if (robj["result"]["success"])
