@@ -39,6 +39,7 @@ node {
                 echo "printing rm value ${​​rm}"​
                 
                 def res = readFile "deployReport.json"
+                echo "Printing res ${res}"
                 def robj = new groovy.json.JsonSlurperClassic().parseText(res)
                 echo "Printing ${robj}"
                 /*if (robj["result"]["success"])
