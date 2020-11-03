@@ -40,24 +40,25 @@ node {
                 sleep time: 1, unit: 'MINUTES'  //to explain
                 println rm
 
-                if (rm == 1) {
+                if (rm == 0) {
                     println ('validation is true')
+                    validationStatus = true
                 } else { println 'Validation is false'}
 
 
-                println ("printing rm value" + rm​)
+                //println ("printing rm value" + rm​)
                 
                 //def res = readFile "deployReport.json"
                 //println ("Printing res" + res)
-                def robj = new groovy.json.JsonSlurperClassic().parseText(rm)
-                println ("Printing " + robj)
+                //def robj = new groovy.json.JsonSlurperClassic().parseText(rm)
+                //println ("Printing " + robj)
             
-                if (robj["result"]["success"])
+                /*if (robj["result"]["success"])
                     {println 'validation successfull' 
                         validationStatus = true
                     }
 
-                else { error 'validation fail '} 
+                else { error 'validation fail '} */
             }
 
         }
