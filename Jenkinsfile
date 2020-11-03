@@ -45,7 +45,7 @@ node {
                 } else { println 'Validation is false'}
 
 
-                //println ("printing rm value" + rm​)
+                println ("printing rm value" + rm​)
                 
                 //def res = readFile "deployReport.json"
                 //println ("Printing res" + res)
