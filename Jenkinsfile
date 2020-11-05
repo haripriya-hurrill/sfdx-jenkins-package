@@ -27,7 +27,7 @@ node {
         stage('Authorise to Saleforce') {
             rc = command " sfdx force:auth:jwt:grant --clientid ${sfdc_org_consumer_key} --username ${sfdc_org_username} --jwtkeyfile ${server_key_file} --setalias PROD"
             if (rc != 0) { error 'hub org authorization failed' }  
-            else { printssln 'Authorisation successfull'} 
+            else { println 'Authorisation successfull'} 
         }
 
         
