@@ -11,6 +11,7 @@ node {
     def SF_CONSUMER_KEY=env.SF_CONSUMER_KEY   
     def SF_JWT_CRED_ID=env.SF_JWT_CRED_ID
     def validationStatus = false
+    def  SFDX_PROJECT = ""
 
     stage('Init test'){
         println "Init test"
@@ -26,7 +27,7 @@ node {
         stage('Authorise to Saleforce') {
             rc = command " sfdx force:auth:jwt:grant --clientid ${sfdc_org_consumer_key} --username ${sfdc_org_username} --jwtkeyfile ${server_key_file} --setalias PROD"
             if (rc != 0) { error 'hub org authorization failed' }  
-            else { println 'Authorisation successfull'} 
+            else { printssln 'Authorisation successfull'} 
         }
 
         
@@ -51,6 +52,8 @@ node {
                 //def res = readFile "deployReport.json"
                 //println ("Printing res" + res)
                 //def robj = new groovy.json.JsonSlurperClassic().parseText(rm)
+                def robj = jsonParse (readfile('sfdx-project.json'))
+                SFDX_PROJECT = robj
                 //println ("Printing " + robj)
             
                 /*if (robj["result"]["success"])
