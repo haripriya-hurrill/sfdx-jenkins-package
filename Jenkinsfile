@@ -52,16 +52,16 @@ node {
                 //def res = readFile "deployReport.json"
                 //println ("Printing res" + res)
                 //def robj = new groovy.json.JsonSlurperClassic().parseText(rm)
-                def robj = jsonParse (readfile('sfdx-project.json'))
-                SFDX_PROJECT = robj
+                def robj = jsonParse (rm)
+                
                 //println ("Printing " + robj)
             
-                /*if (robj["result"]["success"])
+                if (robj["result"]["success"])
                     {println 'validation successfull' 
                         validationStatus = true
                     }
 
-                else { error 'validation fail '} */
+                else { error 'validation fail '} 
             }
 
         }
